@@ -1,19 +1,25 @@
 // ==UserScript==
 // @name         知乎-移除自动关键字链接
-// @namespace    https://github.com/Peter-JXL/UserScript
+// @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  移除知乎自动添加的关键字超链接（如 zhida.zhihu.com 链接）
+// @icon         https://s21.ax1x.com/2025/03/23/pE0qpRK.jpg
+// @compatible   chrome,edge,firefox
 // @author       PeterJXL
+// @homepageURL  https://www.peterjxl.com
+// @license      MIT
+// @create       2025-03-28
+// @lastmodified 2025-03-28
 // @match        https://www.zhihu.com/*
 // @match        https://zhuanlan.zhihu.com/*
-// @grant        none
 // @run-at       document-end
+// @supportURL   https://github.com/Peter-JXL/UserScript/issues
+// @grant        none
 // ==/UserScript==
-
 
 (function() {
   'use strict';
-
+  
   // 目标链接特征（匹配自动生成的知乎站内链接）
   const TARGET_LINK_REGEX = /https:\/\/zhida\.zhihu\.com\/search\?.*?(content_id|q)=/i;
 
