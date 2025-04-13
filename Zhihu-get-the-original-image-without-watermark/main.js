@@ -31,6 +31,7 @@
       if (newSrc !== img.src) {
         img.src = newSrc;
       }
+      img.removeAttribute('data-original');
     });
   }
 
