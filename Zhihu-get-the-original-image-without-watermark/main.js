@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         知乎-获取无水印原图
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  获取知乎无水印图片，并替换掉页面上的有水印图片
 // @icon         https://s21.ax1x.com/2025/03/23/pE0qpRK.jpg
 // @compatible   chrome,edge,firefox

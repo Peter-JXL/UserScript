@@ -53,7 +53,7 @@
       subtree: true
   });
 
-  // 监听知乎的异步加载（SPA页面切换）
+  // 监听知乎的异步加载（SPA 页面切换）
   window.addEventListener('popstate', removeAutoLinks);
   window.addEventListener('pushstate', removeAutoLinks);
 
