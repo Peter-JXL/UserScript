@@ -2,10 +2,10 @@
 
 ## 脚本简介
 
-下面简单介绍下几个脚本。
+下面简单介绍下几个脚本的作用和使用方法。
 
 
-### 获取知乎无水印原图
+### 获取知乎无水印原图（Zhihu-get-the-original-image-without-watermark）
 
 脚本地址：https://greasyfork.org/zh-CN/scripts/531189
 
@@ -35,11 +35,11 @@ src 属性的值是图片链接（带用户水印的）。而 `data-original-tok
 
 经实测，和部分知乎相关的脚本冲突，目前还在研究中。
 
+<br/>
+<br/>
+<br/>
 
-
-
-
-### 去除知乎直达搜索链接
+### 去除知乎直达搜索链接（Zhihu-remove-Automatic-Keyword-Linking）
 
 脚本地址：https://greasyfork.org/zh-CN/scripts/531190
 
@@ -57,12 +57,12 @@ src 属性的值是图片链接（带用户水印的）。而 `data-original-tok
 
 以上两个脚本的详细说明，请参考我的个人博客：[写了两个实用的知乎油猴脚本（用 AI 两分钟搞定！） ](https://www.peterjxl.com/Browser/Tampermonkey-scripts/Two-scripts-for-zhihu-write-by-myself)
 
+<br/>
+<br/>
+<br/>
 
 
-
-### 在 EPUB 中加个空格
-
-源码地址：[点这里](./epub_add_space_between_cn_en/epub_add_space_between_cn_en.py)
+### 在 EPUB 中加个空格（epub_add_space_between_cn_en）
 
 平时有读书的习惯（也偶尔看看网文），但大部分书都没「加个空格」，对于我这个习惯了加空格的人来说，阅读体验很不好。
 
@@ -78,11 +78,30 @@ src 属性的值是图片链接（带用户水印的）。而 `data-original-tok
 
 所以，我就写了一个脚本，处理 EPUB 文件，在中文和英文字符之间加一个空格。
 
+使用方法：
+
+1. 先在 [Python 官网](https://www.python.org/) 下载安装 Python
+2. 安装依赖库：`pip install beautifulsoup4`
+3. 运行脚本：`python epub_add_space_between_cn_en.py input.epub output.epub`
+
+
 后来，我还使用 Quicker 封装该命令，实现一键处理。
 
-更多内容，请参考：[一个小技巧，让电子书阅读体验翻倍！](https://www.peterjxl.com/Reading/tools/add-a-blank/)
+关于背景信息和开发过程，推荐阅读：[一个小技巧，让电子书阅读体验翻倍！](https://www.peterjxl.com/Reading/tools/add-a-blank/)
 
+### 在 TXT 中加个空格（txt_add_space_between_cn_en）
 
+同上，在 txt 文件中加个空格。
+
+使用方法：
+
+1. 先在 [Python 官网](https://www.python.org/) 下载安装 Python
+2. 安装依赖库：`pip install chardet`
+3. 运行脚本
+   1. 基础用法：`python txt_add_space_between_cn_en.py input.txt`
+   2. 自定义输出路径：`python txt_add_space_between_cn_en.py input.txt -o output.txt`
+
+同上，也可以用 Quicker 封装该命令，实现一键处理。
 
 ## 最后
 
