@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup, NavigableString
 # 该脚本处理 EPUB 文件：在中文和英文、数字之间添加个空格，以改善阅读体验。
 
 def process_text(text):
-
+    """处理中文与字母、数字之间的空格"""
     # 处理中文与字母/数字之间的边界
     text = re.sub(r'([\u4e00-\u9fff])([a-zA-Z0-9]+)', r'\1 \2', text)
     text = re.sub(r'([a-zA-Z0-9]+)([\u4e00-\u9fff])', r'\1 \2', text)
@@ -20,13 +20,25 @@ def process_text(text):
     return text
 
 def process_html(content):
-    """处理 HTML 内容"""
+    """处理 HTML 内容，只处理正文部分，避免修改头部"""
+    # 使用 BeautifulSoup 解析 HTML 内容
     soup = BeautifulSoup(content, 'html.parser')
     
-    for element in soup.find_all(string=True):
-        if isinstance(element, NavigableString) and element.strip():
-            new_text = process_text(element)
-            element.replace_with(new_text)
+    # 找到 <body> 部分（如果有的话），我们只处理正文部分
+    body = soup.find('body')
+    
+    if body:
+        for element in body.find_all(string=True):
+            if isinstance(element, NavigableString) and element.strip():
+                # 只对正文内容进行处理，避免修改 XML 声明和 DOCTYPE
+                new_text = process_text(element)
+                element.replace_with(new_text)
+    else:
+        # 如果没有 <body> 标签，直接对整个内容处理
+        for element in soup.find_all(string=True):
+            if isinstance(element, NavigableString) and element.strip():
+                new_text = process_text(element)
+                element.replace_with(new_text)
     
     return str(soup)
 
