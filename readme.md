@@ -87,7 +87,11 @@ src 属性的值是图片链接（带用户水印的）。而 `data-original-tok
 
 后来，我还使用 Quicker 封装该命令，实现一键处理。
 
-关于背景信息和开发过程，推荐阅读：[一个小技巧，让电子书阅读体验翻倍！](https://www.peterjxl.com/Reading/tools/add-a-blank/)
+
+关于背景信息和开发过程，可以看我的这篇文章：[一个小技巧，让电子书阅读体验翻倍！](https://www.peterjxl.com/Reading/tools/add-a-blank/)
+
+关于 Quicker，可以看我的这篇文章：[Quicker：我唯一愿意称之为神器的工具](https://www.peterjxl.com/Productive-Tool/Quicker)
+
 
 ### 在 TXT 中加个空格（txt_add_space_between_cn_en）
 
