@@ -3,7 +3,7 @@ import os
 import re
 import tempfile
 import shutil
-from bs4 import BeautifulSoup, NavigableString
+from bs4 import BeautifulSoup, NavigableString, Comment
 
 # 该脚本处理 EPUB 文件：在中文和英文、数字之间添加个空格，以改善阅读体验。
 
@@ -19,9 +19,21 @@ def process_text(text):
     
     return text
 
+def process_toc_ncx(content):
+    """处理 toc.ncx 文件中的文本，添加空格"""
+    soup = BeautifulSoup(content, 'xml')
+    
+    # 找到所有 <text> 标签并处理
+    for text_tag in soup.find_all('text'):
+        if text_tag.string:
+            # 只对 <text> 标签内的文本进行处理
+            new_text = process_text(text_tag.string)
+            text_tag.string.replace_with(new_text)
+    
+    return str(soup)
+
 def process_html(content):
     """处理 HTML 内容，只处理正文部分，避免修改头部"""
-    # 使用 BeautifulSoup 解析 HTML 内容
     soup = BeautifulSoup(content, 'html.parser')
     
     # 找到 <body> 部分（如果有的话），我们只处理正文部分
@@ -29,14 +41,14 @@ def process_html(content):
     
     if body:
         for element in body.find_all(string=True):
-            if isinstance(element, NavigableString) and element.strip():
+            if isinstance(element, NavigableString) and element.strip() and not isinstance(element, Comment):
                 # 只对正文内容进行处理，避免修改 XML 声明和 DOCTYPE
                 new_text = process_text(element)
                 element.replace_with(new_text)
     else:
         # 如果没有 <body> 标签，直接对整个内容处理
         for element in soup.find_all(string=True):
-            if isinstance(element, NavigableString) and element.strip():
+            if isinstance(element, NavigableString) and element.strip() and not isinstance(element, Comment):
                 new_text = process_text(element)
                 element.replace_with(new_text)
     
@@ -49,11 +61,13 @@ def process_epub(input_file, output_file):
         with zipfile.ZipFile(input_file, 'r') as zip_ref:
             zip_ref.extractall(tmp_dir)
         
-        # 处理所有HTML/XHTML文件
+        # 处理所有 HTML/XHTML 文件
         for root, _, files in os.walk(tmp_dir):
             for file in files:
+                file_path = os.path.join(root, file)
+                
+                # 处理 HTML 和 XHTML 文件
                 if file.lower().endswith(('.html', '.xhtml')):
-                    file_path = os.path.join(root, file)
                     with open(file_path, 'r', encoding='utf-8') as f:
                         content = f.read()
                     
@@ -61,8 +75,18 @@ def process_epub(input_file, output_file):
                     
                     with open(file_path, 'w', encoding='utf-8') as f:
                         f.write(modified_content)
+                
+                # 处理 toc.ncx 文件
+                elif file.lower() == 'toc.ncx':
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    
+                    modified_content = process_toc_ncx(content)
+                    
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        f.write(modified_content)
         
-        # 重新打包EPUB
+        # 重新打包 EPUB
         with zipfile.ZipFile(output_file, 'w', zipfile.ZIP_DEFLATED) as zip_out:
             for root, _, files in os.walk(tmp_dir):
                 for file in files:
