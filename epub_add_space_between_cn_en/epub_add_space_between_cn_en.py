@@ -5,22 +5,17 @@ import tempfile
 import shutil
 from bs4 import BeautifulSoup, NavigableString, Comment
 
-# 该脚本处理 EPUB 文件：在中文和英文、数字之间添加个空格，以改善阅读体验。
+# 该脚本处理 EPUB 文件：在中文和英文/数字之间添加空格以改善阅读体验；英文与数字之间不加空格（如 AK47、iPhone12 保持原样）。
 
 def process_text(text):
-    """处理中文与字母、数字之间的空格"""
+    """处理中文与字母、数字之间的空格（英文与数字之间不加空格，如 AK47 保持不拆）"""
     # 处理中文与字母/数字之间的边界
     text = re.sub(r'([\u4e00-\u9fff])([a-zA-Z0-9]+)', r'\1 \2', text)
     text = re.sub(r'([a-zA-Z0-9]+)([\u4e00-\u9fff])', r'\1 \2', text)
-    
-    # 处理字母与数字之间的边界
-    text = re.sub(r'([a-zA-Z]+)(\d+)', r'\1 \2', text)
-    text = re.sub(r'(\d+)([a-zA-Z]+)', r'\1 \2', text)
-    
     return text
 
 def process_toc_ncx(content):
-    """处理 toc.ncx 文件中的文本，添加空格"""
+    """处理 toc.ncx 目录文件中的文本，添加空格"""
     soup = BeautifulSoup(content, 'xml')
     
     # 找到所有 <text> 标签并处理
@@ -57,7 +52,7 @@ def process_html(content):
 def process_epub(input_file, output_file):
     """处理 EPUB 文件"""
     with tempfile.TemporaryDirectory() as tmp_dir:
-        # 解压EPUB文件
+        # 解压 EPUB 文件
         with zipfile.ZipFile(input_file, 'r') as zip_ref:
             zip_ref.extractall(tmp_dir)
         
