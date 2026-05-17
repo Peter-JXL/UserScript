@@ -32,13 +32,13 @@
     };
   }
 
-  // 核心处理函数：安全转纯文本，不破坏React DOM结构
+  // 核心处理函数：安全转纯文本，不破坏 React DOM 结构
   function removeAutoLinks() {
     document.querySelectorAll('a[href]').forEach(link => {
       // 只处理符合规则的链接
       if (!TARGET_LINK_REGEX.test(link.href)) return;
 
-      // 1. 提取纯文本内容（自动过滤svg、标签，只保留文字）
+      // 1. 提取纯文本内容（自动过滤 svg、标签，只保留文字）
       const pureText = link.textContent.trim();
       
       // 2. 核心安全操作：仅修改a标签内部内容，保留a标签本身（React不会崩溃）
@@ -62,7 +62,7 @@
     });
   }
 
-  // 防抖执行，避免频繁DOM操作
+  // 防抖执行，避免频繁 DOM 操作
   const debounceRemoveLinks = debounce(removeAutoLinks);
 
   // 初始执行
@@ -75,7 +75,7 @@
     subtree: true
   });
 
-  // 监听SPA页面切换
+  // 监听 SPA 页面切换
   window.addEventListener('popstate', debounceRemoveLinks);
   window.addEventListener('pushstate', debounceRemoveLinks);
 
