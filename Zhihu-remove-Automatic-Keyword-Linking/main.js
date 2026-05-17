@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         知乎-移除自动关键字链接
 // @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      1.3
 // @description  移除知乎自动添加的关键字超链接（如 zhida.zhihu.com 链接）
 // @icon         https://s21.ax1x.com/2025/03/23/pE0qpRK.jpg
 // @compatible   chrome,edge,firefox
@@ -19,64 +19,54 @@
 
 (function() {
   'use strict';
-  
-  // 目标链接特征（匹配自动生成的知乎站内链接）
+
   const TARGET_LINK_REGEX = /https:\/\/zhida\.zhihu\.com\/search\?.*?(content_id|q)=/i;
 
-  // 防抖函数，避免频繁执行导致卡顿
-  function debounce(func, wait = 100) {
-    let timeout;
-    return function(...args) {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), wait);
-    };
-  }
-
-  // 核心处理函数：安全转纯文本，不破坏 React DOM 结构
   function removeAutoLinks() {
     document.querySelectorAll('a[href]').forEach(link => {
-      // 只处理符合规则的链接
       if (!TARGET_LINK_REGEX.test(link.href)) return;
+      if (link.dataset.done) return;
+      link.dataset.done = "true";
 
-      // 1. 提取纯文本内容（自动过滤 svg、标签，只保留文字）
-      const pureText = link.textContent.trim();
-      
-      // 2. 核心安全操作：仅修改a标签内部内容，保留a标签本身（React不会崩溃）
-      link.innerHTML = pureText;
+      // 1. 获取父级 span
+      const parentSpan = link.closest("span");
+      if (!parentSpan) return;
 
-      // 3. 彻底禁用链接功能
-      link.href = 'javascript:void(0)';
-      link.style.pointerEvents = 'none';
-      link.style.color = 'inherit';
-      link.style.textDecoration = 'none';
-      link.style.cursor = 'text';
+      // 2. 提取纯文本
+      const text = link.textContent.trim();
+      if (!text) return;
 
-      // 4. 清理所有影响复制、埋点的属性
-      link.removeAttribute('target');
-      link.removeAttribute('data-paste-text');
-      link.removeAttribute('data-za-not-track-link');
-      link.removeAttribute('data-za-detail-view-path');
-      link.removeAttribute('data-highlight-id');
-      link.removeAttribute('data-highlight-split-type');
-      link.removeAttribute('data-highlight-id-extra');
+      // 3. 清空 a 内部所有内容（文字 + svg 全部删掉）
+      link.innerHTML = "";
+
+      // 4. 把文本放到 span 最开头
+      const textNode = document.createTextNode(text);
+      parentSpan.prepend(textNode);
+
+      // 5. 清空 href + 禁用点击
+      link.setAttribute("href", "");
+      link.style.pointerEvents = "none";
+      link.style.color = "inherit";
+      link.style.textDecoration = "none";
     });
   }
 
-  // 防抖执行，避免频繁 DOM 操作
-  const debounceRemoveLinks = debounce(removeAutoLinks);
-
-  // 初始执行
   removeAutoLinks();
 
-  // 监听动态内容（评论区、无限滚动、折叠展开）
-  const observer = new MutationObserver(debounceRemoveLinks);
+  const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.addedNodes.length) {
+        removeAutoLinks();
+      }
+    });
+  });
+
   observer.observe(document.body, {
     childList: true,
     subtree: true
   });
 
-  // 监听 SPA 页面切换
-  window.addEventListener('popstate', debounceRemoveLinks);
-  window.addEventListener('pushstate', debounceRemoveLinks);
+  window.addEventListener('popstate', removeAutoLinks);
+  window.addEventListener('pushstate', removeAutoLinks);
 
 })();
