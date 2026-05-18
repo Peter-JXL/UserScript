@@ -1,11 +1,9 @@
-本仓库存放个人编写的实用脚本
-
-## 脚本简介
+本仓库存放个人编写的实用脚本。
 
 下面简单介绍下几个脚本的作用和使用方法。
 
 
-### 获取知乎无水印原图（Zhihu-get-the-original-image-without-watermark）
+## 获取知乎无水印原图（Zhihu-get-the-original-image-without-watermark）
 
 脚本地址：https://greasyfork.org/zh-CN/scripts/531189
 
@@ -37,7 +35,7 @@ src 属性的值是图片链接（带用户水印的）。而 `data-original-tok
 <br/>
 <br/>
 
-### 去除知乎直达搜索链接（Zhihu-remove-Automatic-Keyword-Linking）
+## 去除知乎直达搜索链接（Zhihu-remove-Automatic-Keyword-Linking）
 
 脚本地址：https://greasyfork.org/zh-CN/scripts/531190
 
@@ -56,7 +54,7 @@ src 属性的值是图片链接（带用户水印的）。而 `data-original-tok
 <br/>
 
 
-### 在 EPUB 中加个空格（epub_add_space_between_cn_en）
+## 在 EPUB 中加个空格（epub_add_space_between_cn_en）
 
 平时有读书的习惯，但大部分书都没有在中文和英文（和数字）之间，加一个空格。降低了阅读体验。
 
@@ -88,7 +86,7 @@ src 属性的值是图片链接（带用户水印的）。而 `data-original-tok
 <br/>
 <br/>
 
-### 在 TXT 中加个空格（txt_add_space_between_cn_en）
+## 在 TXT 中加个空格（txt_add_space_between_cn_en）
 
 该脚本用于在 txt 文件中加个空格。
 
