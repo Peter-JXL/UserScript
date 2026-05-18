@@ -7,6 +7,8 @@
 
 脚本地址：https://greasyfork.org/zh-CN/scripts/531189
 
+使用方法：安装油猴插件（Tampermonkey），然后安装该脚本，打开知乎，就会自动替换为无水印的原图。
+
 源码地址：[点这里](./Zhihu-get-the-original-image-without-watermark/main.js)
 
 
@@ -38,6 +40,8 @@ src 属性的值是图片链接（带用户水印的）。而 `data-original-tok
 ## 去除知乎直达搜索链接（Zhihu-remove-Automatic-Keyword-Linking）
 
 脚本地址：https://greasyfork.org/zh-CN/scripts/531190
+
+使用方法：安装油猴插件（Tampermonkey），然后安装该脚本，打开知乎，就会自动去除直达搜索链接。
 
 源码地址：[点这里](./Zhihu-remove-Automatic-Keyword-Linking/main.js)
 
@@ -86,7 +90,7 @@ src 属性的值是图片链接（带用户水印的）。而 `data-original-tok
 <br/>
 <br/>
 
-## 在 TXT 中加个空格（txt_add_space_between_cn_en）
+### 在 TXT 中加个空格（txt_add_space_between_cn_en）
 
 该脚本用于在 txt 文件中加个空格。
 
