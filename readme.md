@@ -48,7 +48,6 @@ src 属性的值是图片链接（带用户水印的）。而 `data-original-tok
 点击这些超链接，就会在平台内搜索该关键字，某种程度上算方便了用户，但也影响了美观以及保存。
 
 开发思路：用正则匹配超链接，然后替换为纯文本。
----
 
 以上两个脚本的详细说明，可参考我的个人博客：[写了两个实用的知乎油猴脚本（用 AI 两分钟搞定！） ](https://www.peterjxl.com/Browser/Tampermonkey-scripts/Two-scripts-for-zhihu-write-by-myself)
 
@@ -85,6 +84,9 @@ src 属性的值是图片链接（带用户水印的）。而 `data-original-tok
 
 关于 Quicker，可以看我的这篇文章：[Quicker：我唯一愿意称之为神器的工具](https://www.peterjxl.com/Productive-Tool/Quicker)
 
+<br/>
+<br/>
+<br/>
 
 ### 在 TXT 中加个空格（txt_add_space_between_cn_en）
 
