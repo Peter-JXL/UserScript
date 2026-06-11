@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         知乎-移除自动关键字链接
 // @namespace    http://tampermonkey.net/
-// @version      1.3.1
+// @version      1.3.2
 // @description  移除知乎自动添加的关键字超链接（如 zhida.zhihu.com 链接）
 // @icon         https://s21.ax1x.com/2025/03/23/pE0qpRK.jpg
 // @compatible   chrome,edge,firefox
@@ -20,8 +20,8 @@
 (function() {
   'use strict';
 
-  // 兼容旧 zhida.zhihu.com + 新版 www.zhihu.com/search 实体链接
-  const TARGET_LINK_REGEX = /https:\/\/(zhida\.zhihu\.com|www\.zhihu\.com)\/search\?.*?(content_id|q|search_source=Entity)/i;
+  // 仅匹配 zhida.zhihu.com 的搜索链接
+  const TARGET_LINK_REGEX = /https:\/\/zhida\.zhihu\.com\/search\?.*/i;
 
   function removeAutoLinks() {
     document.querySelectorAll('a[href]').forEach(link => {
