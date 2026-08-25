@@ -14,40 +14,47 @@ def process_text(text):
     text = re.sub(r'([a-zA-Z0-9]+)([\u4e00-\u9fff])', r'\1 \2', text)
     return text
 
+
+def process_html(content):
+    """处理 HTML 内容，同时优化正文和 <title> 标签"""
+    soup = BeautifulSoup(content, 'html.parser')
+
+    # ==================== 处理 <title> 标签（新增需求） ====================
+    # 小说正文中 <title> 内的内容也需要加空格
+    if soup.title:
+        if soup.title.string:
+            new_title = process_text(soup.title.string)
+            soup.title.string.replace_with(new_title)
+
+    # ==================== 处理正文部分 ====================
+    body = soup.find('body')
+
+    if body:
+        for element in body.find_all(string=True):
+            if isinstance(element, NavigableString) and element.strip() and not isinstance(element, Comment):
+                new_text = process_text(element)
+                element.replace_with(new_text)
+    else:
+        # 如果没有 <body> 标签，直接处理整个文档
+        for element in soup.find_all(string=True):
+            if isinstance(element, NavigableString) and element.strip() and not isinstance(element, Comment):
+                new_text = process_text(element)
+                element.replace_with(new_text)
+
+    return str(soup)
+
+
 def process_toc_ncx(content):
     """处理 toc.ncx 目录文件中的文本，添加空格"""
     soup = BeautifulSoup(content, 'xml')
     
-    # 找到所有 <text> 标签并处理
     for text_tag in soup.find_all('text'):
         if text_tag.string:
-            # 只对 <text> 标签内的文本进行处理
             new_text = process_text(text_tag.string)
             text_tag.string.replace_with(new_text)
     
     return str(soup)
 
-def process_html(content):
-    """处理 HTML 内容，只处理正文部分，避免修改头部"""
-    soup = BeautifulSoup(content, 'html.parser')
-    
-    # 找到 <body> 部分（如果有的话），我们只处理正文部分
-    body = soup.find('body')
-    
-    if body:
-        for element in body.find_all(string=True):
-            if isinstance(element, NavigableString) and element.strip() and not isinstance(element, Comment):
-                # 只对正文内容进行处理，避免修改 XML 声明和 DOCTYPE
-                new_text = process_text(element)
-                element.replace_with(new_text)
-    else:
-        # 如果没有 <body> 标签，直接对整个内容处理
-        for element in soup.find_all(string=True):
-            if isinstance(element, NavigableString) and element.strip() and not isinstance(element, Comment):
-                new_text = process_text(element)
-                element.replace_with(new_text)
-    
-    return str(soup)
 
 def process_epub(input_file, output_file):
     """处理 EPUB 文件"""
@@ -89,10 +96,11 @@ def process_epub(input_file, output_file):
                     arcname = os.path.relpath(file_path, tmp_dir)
                     zip_out.write(file_path, arcname)
 
+
 if __name__ == '__main__':
     import argparse
 
-    parser = argparse.ArgumentParser(description='在 EPUB 文件中添加空格')
+    parser = argparse.ArgumentParser(description='在 EPUB 文件中添加空格（包括 <title> 标签）')
     parser.add_argument('input', help='输入 EPUB 文件路径')
     parser.add_argument('output', help='输出 EPUB 文件路径')
     
