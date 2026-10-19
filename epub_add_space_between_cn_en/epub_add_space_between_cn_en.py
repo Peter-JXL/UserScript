@@ -12,6 +12,8 @@ def process_text(text):
     # 处理中文与字母/数字之间的边界
     text = re.sub(r'([\u4e00-\u9fff])([a-zA-Z0-9]+)', r'\1 \2', text)
     text = re.sub(r'([a-zA-Z0-9]+)([\u4e00-\u9fff])', r'\1 \2', text)
+    # 处理百分号后跟汉字的情况
+    text = re.sub(r'(%)([\u4e00-\u9fff])', r'\1 \2', text)
     return text
 
 
